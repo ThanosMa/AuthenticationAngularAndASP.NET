@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using WebApiTest.Models;
@@ -13,7 +14,7 @@ namespace WebApiTest.Controllers
 {
     public class AccountController : ApiController
     {
-        [EnableCors("*", "*", "GET,POST,PUT,DELETE")]
+        //[EnableCors("*", "*", "GET,POST,PUT,DELETE")]
         [Route("api/User/Register")]
         [HttpPost]
         [AllowAnonymous]
@@ -36,21 +37,22 @@ namespace WebApiTest.Controllers
             return result;
         }
 
-        //[HttpGet]
-        //[Route("api/GetUserClaims")]
-        //public AccountModel GetUserClaims()
-        //{
-        //    var identityClaims = (ClaimsIdentity)User.Identity;
-        //    IEnumerable<Claim> claims = identityClaims.Claims;
-        //    AccountModel model = new AccountModel()
-        //    {
-        //        UserName = identityClaims.FindFirst("Username").Value,
-        //        Email = identityClaims.FindFirst("Email").Value,
-        //        FirstName = identityClaims.FindFirst("FirstName").Value,
-        //        LastName = identityClaims.FindFirst("LastName").Value,
-        //        LoggedOn = identityClaims.FindFirst("LoggedOn").Value
-        //    };
-        //    return model;
-        //}
+        [HttpGet]
+        [Route("api/GetUserClaims")]
+        
+        public AccountModel GetUserClaims()
+        {
+            var identityClaims = (ClaimsIdentity)User.Identity;
+            IEnumerable<Claim> claims = identityClaims.Claims;
+            AccountModel model = new AccountModel()
+            {
+                UserName = identityClaims.FindFirst("Username").Value,
+                Email = identityClaims.FindFirst("Email").Value,
+                FirstName = identityClaims.FindFirst("FirstName").Value,
+                LastName = identityClaims.FindFirst("LastName").Value,
+                LoggedOn = identityClaims.FindFirst("LoggedOn").Value
+            };
+            return model;
+        }
     }
 }

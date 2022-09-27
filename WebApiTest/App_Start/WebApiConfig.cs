@@ -13,7 +13,7 @@ namespace WebApiTest
             // Web API configuration and services
 
             // Web API routes
-            config.EnableCors(true);
+            //config.EnableCors(true);
             //config.EnableCors(new EnableCorsAttribute("http://localhost:4200", headers: "*", methods: "*"));
             config.MapHttpAttributeRoutes();
 
@@ -22,6 +22,7 @@ namespace WebApiTest
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+            config.Filters.Add(new AuthorizeAttribute());
         }
     }
 }
