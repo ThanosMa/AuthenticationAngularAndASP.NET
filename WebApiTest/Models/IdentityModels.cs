@@ -18,6 +18,7 @@ namespace WebApiTest.Models
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
+
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

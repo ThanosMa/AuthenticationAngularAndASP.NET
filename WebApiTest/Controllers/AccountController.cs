@@ -32,14 +32,19 @@ namespace WebApiTest.Controllers
             manager.PasswordValidator = new PasswordValidator
             {
                 RequiredLength = 3
+
             };
             IdentityResult result = manager.Create(user, model.Password);
+            //if (model.Roles.Contains("Admin"))
+            //{
+            //    return IdentityResult.Failed("Admin Allready exists");
+            //}
+            manager.AddToRoles(user.Id, model.Roles);
             return result;
         }
 
         [HttpGet]
         [Route("api/GetUserClaims")]
-        
         public AccountModel GetUserClaims()
         {
             var identityClaims = (ClaimsIdentity)User.Identity;
@@ -53,6 +58,29 @@ namespace WebApiTest.Controllers
                 LoggedOn = identityClaims.FindFirst("LoggedOn").Value
             };
             return model;
+        }
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        [Route("api/ForAdminRole")]
+        public string ForAdminRole()
+        {
+            return "for admin role";
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Author")]
+        [Route("api/ForAuthorRole")]
+        public string ForAuthorRole()
+        {
+            return "For author role";
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Author,Reader")]
+        [Route("api/ForAuthorOrReader")]
+        public string ForAuthorOrReader()
+        {
+            return "For author/reader role";
         }
     }
 }
